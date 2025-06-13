@@ -24,6 +24,7 @@ public class LocationEntity {
     @Column(nullable = false, name = "capacity")
     private Integer capacity;
 
+    @Column(name = "description")
     private String description;
 
     public LocationEntity() {

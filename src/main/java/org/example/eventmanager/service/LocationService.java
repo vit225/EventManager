@@ -5,10 +5,7 @@ import org.example.eventmanager.domain.Location;
 import org.example.eventmanager.entity.LocationEntity;
 import org.example.eventmanager.converter.LocationEntityConverter;
 import org.example.eventmanager.repository.LocationRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -31,13 +28,11 @@ public class LocationService {
                 .toList();
     }
 
-    @Transactional
     public Location createLocation(Location location) {
         LocationEntity savedLocationEntity = locationRepository.save(converter.toEntity(location));
         return converter.toDomain(savedLocationEntity);
     }
 
-    @Transactional
     public void deleteLocation(Integer locationId) {
         if (!locationRepository.existsById(locationId)) {
             throw new EntityNotFoundException("Not found location by id=%s".formatted(locationId));
@@ -52,19 +47,14 @@ public class LocationService {
         return converter.toDomain(locationEntity);
     }
 
-    @Transactional
     public Location updateLocation(Integer locationId, Location locationToUpdate) {
         if (!locationRepository.existsById(locationId)) {
             throw new EntityNotFoundException("No found location by id=%s".formatted(locationId));
         }
 
-        locationRepository.updateLocation(
-                locationId,
-                locationToUpdate.getName(),
-                locationToUpdate.getAddress(),
-                locationToUpdate.getCapacity(),
-                locationToUpdate.getDescription());
+        locationToUpdate.setId(locationId);
+        LocationEntity updatedLocation = locationRepository.save(converter.toEntity(locationToUpdate));
 
-        return converter.toDomain(locationRepository.findById(locationId).orElseThrow());
+        return converter.toDomain(updatedLocation);
     }
 }

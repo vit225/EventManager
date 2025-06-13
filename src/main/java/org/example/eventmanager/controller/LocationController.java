@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.util.List;
 
 @RestController
@@ -62,20 +61,24 @@ public class LocationController {
     }
 
     @GetMapping("/{locationId}")
-    public LocationDto getLocationById(@PathVariable Integer locationId) {
+    public ResponseEntity<LocationDto> getLocationById(@PathVariable Integer locationId) {
         log.info("Get request for get location by id: id={}", locationId);
         Location foundLocation = locationService.getLocationById(locationId);
-        return converter.toDto(foundLocation);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(converter.toDto(foundLocation));
     }
 
     @PutMapping("/{locationId}")
-    public LocationDto updateLocation(
+    public ResponseEntity<LocationDto> updateLocation(
             @PathVariable Integer locationId,
             @RequestBody @Valid LocationDto locationDtoToUpdate
     ) {
         log.info("Get request for update location: id={}, locationToUpdate={}", locationId, locationDtoToUpdate);
-        var updateLocation = locationService.updateLocation(locationId, converter.toDomain(locationDtoToUpdate));
+        Location updateLocation = locationService.updateLocation(locationId, converter.toDomain(locationDtoToUpdate));
 
-        return converter.toDto(updateLocation);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(converter.toDto(updateLocation));
     }
 }
