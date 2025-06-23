@@ -1,7 +1,7 @@
 package org.example.eventmanager;
 
 import org.example.eventmanager.service.UserService;
-import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
@@ -14,7 +14,7 @@ public class DataInitializer {
         this.userService = userService;
     }
 
-    @EventListener(ContextRefreshedEvent.class)
+    @EventListener(ApplicationStartedEvent.class)
     public void onApplicationEvent() {
         userService.createDefaultUsers();
     }
