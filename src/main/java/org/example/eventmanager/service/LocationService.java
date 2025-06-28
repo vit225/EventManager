@@ -35,7 +35,7 @@ public class LocationService {
 
     public void deleteLocation(Integer locationId) {
         if (!locationRepository.existsById(locationId)) {
-            throw new EntityNotFoundException("Not found location by id=%s".formatted(locationId));
+            throw new EntityNotFoundException("Не найдена локация по идентификатору=%s".formatted(locationId));
         }
 
         locationRepository.deleteById(locationId);
@@ -43,13 +43,13 @@ public class LocationService {
 
     public Location getLocationById(Integer locationId) {
         LocationEntity locationEntity = locationRepository.findById(locationId)
-                .orElseThrow(() -> new EntityNotFoundException("No found location by id=%s".formatted(locationId)));
+                .orElseThrow(() -> new EntityNotFoundException("Не найдена локация по идентификатору=%s".formatted(locationId)));
         return converter.toDomain(locationEntity);
     }
 
     public Location updateLocation(Integer locationId, Location locationToUpdate) {
         if (!locationRepository.existsById(locationId)) {
-            throw new EntityNotFoundException("No found location by id=%s".formatted(locationId));
+            throw new EntityNotFoundException("Не найдена локация по идентификатору=%s".formatted(locationId));
         }
 
         locationToUpdate.setId(locationId);

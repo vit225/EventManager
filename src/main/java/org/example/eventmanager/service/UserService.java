@@ -41,13 +41,13 @@ public class UserService {
     }
 
     public User getUserById(Integer userId) {
-        UserEntity userEntity = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("No found user by id=%s".formatted(userId)));
+        UserEntity userEntity = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("Не найден пользователь по идентификатору=%s".formatted(userId)));
         return userEntityConverter.toDomain(userEntity);
     }
 
     public User findByLogin(String login) {
         var user = userRepository.findByLogin(login)
-                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Не найден пользователь по логину=%s".formatted(login)));
         return userEntityConverter.toDomain(user);
     }
 
