@@ -18,7 +18,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<ServerMessageDto> handleNotFoundException(EntityNotFoundException e) {
-        log.error("Got exception", e);
+        log.error("Entity not found", e);
         ServerMessageDto messageDto = new ServerMessageDto("Сущность не найдена", e.getMessage(),
                 LocalDateTime.now());
 
@@ -31,7 +31,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ServerMessageDto> handleValidationException(MethodArgumentNotValidException e) {
         log.error("Got validation exception", e);
-        var messageDto = new ServerMessageDto("Ошибка валидации запроса", e.getMessage(), LocalDateTime.now());
+        ServerMessageDto messageDto = new ServerMessageDto("Ошибка валидации запроса", e.getMessage(), LocalDateTime.now());
 
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
@@ -42,10 +42,20 @@ public class GlobalExceptionHandler {
     @ExceptionHandler
     public ResponseEntity<ServerMessageDto> handleGenerisException(Exception e) {
         log.error("Server error", e);
-        var errorDto = new ServerMessageDto("Server error", e.getMessage(), LocalDateTime.now());
+        ServerMessageDto errorDto = new ServerMessageDto("Server error", e.getMessage(), LocalDateTime.now());
 
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(errorDto);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ServerMessageDto> handleIllegalArgumentException(IllegalArgumentException e) {
+        log.error("Illegal argument", e);
+        ServerMessageDto messageDto = new ServerMessageDto("Illegal argument", e.getMessage(), LocalDateTime.now());
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(messageDto);
     }
 }
