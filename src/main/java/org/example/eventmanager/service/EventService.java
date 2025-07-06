@@ -14,7 +14,6 @@ import org.example.eventmanager.repository.EventRepository;
 import org.example.eventmanager.security.jwt.AuthenticationService;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -160,10 +159,8 @@ public class EventService {
     }
 
     public void updateEventStatuses() {
-        LocalDateTime now = LocalDateTime.now();
-
-        eventRepository.updateStartedEvents(EventStatus.STARTED.name(), now);
-        eventRepository.updateEndedEvents(EventStatus.FINISHED.name(), now);
+        eventRepository.updateStartedEvents();
+        eventRepository.updateEndedEvents();
     }
 
 }

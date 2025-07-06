@@ -47,21 +47,21 @@ public interface EventRepository extends JpaRepository<EventEntity, Integer> {
     @Transactional
     @Modifying
     @Query(value = """
-            UPDATE event SET status = :status
-            WHERE date <= :now
-            AND date + (duration * interval '1 minute') > :now
-            AND status <> :status
+            UPDATE event SET status = 'STARTED'
+            WHERE date <= now()
+            AND date + (duration * interval '1 minute') > now()
+            AND status <> 'STARTED'
             AND status <> 'CANCELLED'
             """, nativeQuery = true)
-    void updateStartedEvents(@Param("status") String status, @Param("now") LocalDateTime now);
+    void updateStartedEvents();
 
     @Transactional
     @Modifying
     @Query(value = """
-            UPDATE event SET status = :status
-            WHERE date + (duration * interval '1 minute') <= :now
-            AND status <> :status
+            UPDATE event SET status = 'FINISHED'
+            WHERE date + (duration * interval '1 minute') <= now()
+            AND status <> 'FINISHED'
             AND status <> 'CANCELLED'
             """, nativeQuery = true)
-    void updateEndedEvents(@Param("status") String status, @Param("now") LocalDateTime now);
+    void updateEndedEvents();
 }
