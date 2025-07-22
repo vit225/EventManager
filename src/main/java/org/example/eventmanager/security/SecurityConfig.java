@@ -1,5 +1,6 @@
 package org.example.eventmanager.security;
 
+
 import org.example.eventmanager.security.jwt.JwtTokenFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

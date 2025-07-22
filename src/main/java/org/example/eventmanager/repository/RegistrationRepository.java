@@ -22,5 +22,4 @@ public interface RegistrationRepository extends JpaRepository<RegistrationEntity
     void deleteByUserIdAndEventId(@Param("userId") Integer userId, @Param("eventId") Integer eventId);
 
     List<RegistrationEntity> findByUserId(Integer id);
-
 }
