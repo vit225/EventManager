@@ -51,8 +51,11 @@ public class UserController {
 
     @PostMapping("/auth")
     public ResponseEntity<JwtTokenResponse> authenticate(@RequestBody @Valid AuthRequestDto requestDto) {
-        log.info("Get request for sign-in: login={}", requestDto.getLogin());
-        String token = authenticationService.authenticateUser(requestDto);
+        String login = requestDto.getLogin();
+        log.info("Get request for sign-in: login={}", login);
+        User user = userService.findByLogin(login);
+        String userId = String.valueOf(user.getId());
+        String token = authenticationService.authenticateUser(requestDto, userId);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new JwtTokenResponse(token));

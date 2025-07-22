@@ -3,10 +3,8 @@ package org.example.eventmanager.repository;
 import org.example.eventmanager.entity.EventEntity;
 import org.example.eventmanager.entity.EventStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -44,24 +42,20 @@ public interface EventRepository extends JpaRepository<EventEntity, Integer> {
     );
 
 
-    @Transactional
-    @Modifying
     @Query(value = """
-            UPDATE event SET status = 'STARTED'
-            WHERE date <= now()
-            AND date + (duration * interval '1 minute') > now()
-            AND status <> 'STARTED'
-            AND status <> 'CANCELLED'
-            """, nativeQuery = true)
-    void updateStartedEvents();
+        SELECT * FROM event
+        WHERE date <= now()
+          AND date + (duration * interval '1 minute') > now()
+          AND status <> 'STARTED'
+          AND status <> 'CANCELLED'
+        """, nativeQuery = true)
+    List<EventEntity> findEventsToStart();
 
-    @Transactional
-    @Modifying
     @Query(value = """
-            UPDATE event SET status = 'FINISHED'
-            WHERE date + (duration * interval '1 minute') <= now()
-            AND status <> 'FINISHED'
-            AND status <> 'CANCELLED'
-            """, nativeQuery = true)
-    void updateEndedEvents();
+        SELECT * FROM event
+        WHERE date + (duration * interval '1 minute') <= now()
+          AND status <> 'FINISHED'
+          AND status <> 'CANCELLED'
+        """, nativeQuery = true)
+    List<EventEntity> findEventsToFinish();
 }
